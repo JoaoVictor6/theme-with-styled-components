@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThemeProvider } from 'styled-components';
 import Home from './pages/Home';
-import useCurrentTheme, { ThemeContext } from './themeContext';
+import useCurrentTheme from './themeContext';
 
 const themeValues = {
   Light: {
@@ -13,7 +13,7 @@ const themeValues = {
 }
 
 function App() {
-  const {currentTheme, setCurrentTheme} = useCurrentTheme()
+  const { currentTheme } = useCurrentTheme()
   return (
     <ThemeProvider theme={themeValues[currentTheme]}>
       <Home />

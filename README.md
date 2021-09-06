@@ -90,6 +90,7 @@ Temos que limpar o código do `index.html` também, ele vai ficar assim:
 Agora, partiremos para a pasta `src/`, ela ficará da seguinte forma:
 
 ![image](https://user-images.githubusercontent.com/68869379/132251866-9beb97a7-906b-4d07-99a4-89084b510278.png)
+
 Agora, que limpamos a pasta, também limparemos o arquivo `App.js` e `index.js`:
 ```jsx
 // index.js

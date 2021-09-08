@@ -18,7 +18,6 @@ export const Button = styled.button`
   border-radius: 10px;
   box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.51);
   transition: all .2s;
-
   &:hover {
     cursor: pointer;
     box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.71);

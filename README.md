@@ -121,3 +121,173 @@ export default App;
 ```
 
 Pronto, agoram estamos pronto para codar!🎇
+# Mãos a obra
+
+## Criando o estilo global
+Em todo projeto, é muito recomendado "resetarmos" algumas configurações do css. com `styled-components` faremos isso utilizando do _createGlobalStyle_. ELe vai ficar assim:
+```js
+// src/GlobalStyle.js
+
+import { createGlobalStyle } from 'styled-components'
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+`;
+
+export default GlobalStyle
+```
+> Essas são as minhas config padrão, você poder mudar☺️
+
+Lembra que eu disse que no _styled-components_ os estilos são aplicados em forma de componentes? Então, o estilo global também! para aplicarmos ele, temos que executalo como um componente dentro do arquivo mais importante do projeto, o `index.js`. Vai ficar assim:
+
+```jsx
+// src/index.js
+import GlobalStyle from './GlobalStyle'
+
+ReactDOM.render(
+  <React.StrictMode>
+    <GlobalStyle />
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+```
+> Pronto, nosso tema global ja está sendo aplicado!
+
+## Componentes de estilo
+Nesse projeto, precisaremos de dois componentes. _Button_ e _Main_:
+  - Button deverá ter que mudar o tema da página ao ser clicado
+  - O main simplemsente será onde o button vai ficar 
+### Criando o arquivo de estilos
+O componente main e button serão bem simples, olha como ficou:
+```js
+import styled from "styled-components";
+
+export const Main = styled.main`
+  background: ${(props) => props.theme.backgroundColor};
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all .2s;
+`;
+
+export const Button = styled.button`
+  border-style: none;
+  background: #006eed;
+  padding: 1rem 1.6rem;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.51);
+  transition: all .2s;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.71);
+  }
+`;
+```
+> você deve ter estranhado o `${(props) => props.theme.backgroundColor};` né? mas não se preocupe, explicarei isso daqui a pouco.
+Nosso `app.js` vai ficar assim:
+```jsx
+import { Button, Main } from "./styles";
+
+function App() {
+  return (
+    <Main>
+      <Button>
+        Clique aqui para trocar o tema
+      </Button>
+    </Main>
+  );
+}
+
+export default App;
+```
+> Pronto, a estilização já está pronta 😃
+
+## Configurando o tema padrão
+Criaremos um objeto com as configurações dos nossos temas no arquivo `app.js`, olha como é simples:
+```js
+const themeValues = {
+  Light: {
+    backgroundColor: '#fefefe'
+  },
+  Dark: {
+    backgroundColor: '#1C2128'
+  }
+}
+
+function App(){
+  //code
+}
+```
+
+### Temas e contexto, tem a ver?
+Os temas no styled-compoenents funcionam como a context API do ReactJS, o tema global é um componente onde seus valores só podem ser acessados pelo seus filhos(children), olha como que fica:
+```jsx
+function App() {
+  return (
+    <ThemeProvider theme={themeValues.Dark}>
+    <Main>
+      <Button>
+        Clique aqui para trocar o tema
+      </Button>
+    </Main>
+    </ThemeProvider>
+  );
+```
+> Pronto, agora temos um tema na noss aplicação
+
+### Criando interruptor
+Nosso interruptor(button) vai ter que alterar o tema sempre que for clicado, isso é muito simples. Iremos capiturar o evento de click do button e mudar o tema.  Para isso ocorrer usaremos o `useState`, faremos o seguinte:
+```js
+const [ currentTheme, setCurrentTheme] = useState('Light') // Light, ou Dark
+```
+
+função que captura o click: 
+```js
+function handleClick(){
+    if(currentTheme === 'Dark')
+      return setCurrentTheme('Light')
+    return setCurrentTheme('Dark')
+}
+```
+> Poderiamos usar um boolean mas acredito que no futuro isso vá deixar o código mais simples.
+
+### Ativando o interruptor 💡
+Ainda não passamos o tema para o theme provider, e também, como ele vai saber se é o tema claro ou escuro? muito simples, se olha só:
+
+```jsx
+  function App() {
+  const [ currentTheme, setCurrentTheme] = useState('Light') // Light, ou Dark
+  
+  function handleClick(){ 
+    // function code
+  }
+  return (
+    <ThemeProvider theme={themeValues[currentTheme]}>
+    <Main>
+      <Button onClick={handleClick}>
+        Clique aqui para trocar o tema
+      </Button>
+    </Main>
+    </ThemeProvider>
+  );
+}
+
+```
+> Pronto, aplicamos o tema.
+> Você conhecia esse modo de chamar objetos? `obj['methodName']`?
